@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <h1>WebSocket 예제</h1>
+    <input id="messageInput" type="text" placeholder="메시지를 입력하세요" />
+    <button onclick="sendMessage()">메시지 보내기</button>
+    <div id="messages"></div>
+
+    <script>
+        const ws = new WebSocket('wss://givernance.kri.kr:8443');
+
+        ws.onopen = () => {
+            console.log('WebSocket 연결됨');
+        };
+
+        ws.onmessage = (event) => {
+            const messagesDiv = document.getElementById('messages');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = event.data;
+            messagesDiv.appendChild(newMessage);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket 연결 종료됨');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket 오류:', error);
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            ws.send(input.value);
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
